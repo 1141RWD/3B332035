@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>進擊的巨人</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 特殊字體（主要用在 footer 標題） -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+	/* 右側欄輪播填滿設定 */
+	aside.slide-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%; /* 讓圖片填滿整個 aside */
+    overflow: hidden;
+	border-radius: 14px;
+	}
+
+	/* 每張輪播圖片 */
+	aside .slide-wrap a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: fadeSlide 20s linear infinite;
+	}
+
+	/* 填滿右側＋避免壓扁比例 */
+	aside .slide-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* 🔥 讓圖片填滿 */
+		transition: 0.4s ease;
+		border-radius: 16px;
+	}
+
+	/* 滑鼠移入圖片變形效果 */
+	aside .slide-wrap img:hover {
+	transform: scale(1.07) rotate(1.5deg); /* 🔥 造型變化 */
+	border-radius: 26px;                  /* 🔥 邊角自動變形 */
+	box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+	}
+
+	/* 輪播動畫 */
+	@keyframes fadeSlide {
+		3% {opacity: 1;}
+		18% {opacity: 1;}
+		20% {opacity: 0;}
+	}
+
+	aside .slide-wrap a:nth-child(1) { animation-delay: 0s; }
+	aside .slide-wrap a:nth-child(2) { animation-delay: 4s; }
+	aside .slide-wrap a:nth-child(3) { animation-delay: 8s; }
+	aside .slide-wrap a:nth-child(4) { animation-delay: 12s; }
+	aside .slide-wrap a:nth-child(5) { animation-delay: 16s; }
+
+	aside:hover .slide-wrap a {
+		animation-play-state: paused;
+	}
+
+	.character-box {
+		display: flex;
+		gap: 16px;
+		align-items: center; /* 讓文字與圖片垂直置中 */
+		background: #fff9ef;
+		padding: 16px;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+	}
+
+	/* 左邊文字 */
+	.character-text {
+		flex: 2;
+	}
+
+	/* 右邊圖片 */
+	.character-img {
+		flex: 1;
+		max-width: 180px;
+	}
+
+	.character-img img {
+		width: 100%;
+		border-radius: 12px;
+		object-fit: cover;
+	}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+        margin: 0;
+        font-family: "Microsoft JhengHei", sans-serif;
+        background: linear-gradient(180deg,#f3ebdc 0%, #d0d6d1 40%, #181f1d 100%);
+        color: #111827;
+    }
+	/* 滑鼠移到圖片時暫停動畫 */
+	.home-picture img:hover {
+		animation-play-state: paused;
+
+		/* 額外的外型變化 */
+		transform: scale(1.1); /* 放大 */
+		filter: brightness(1.2); /* 變亮 */
+		border: 3px solid rgba(255, 255, 255, 0.8);
+		border-radius: 15px;
+	}
+
+    /* ===== Header ===== */
+    header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 70px;
+        background: #234236;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+        z-index: 1000;
+        color: #fdf9f0;
+    }
+    header h1 {
+        font-size: 1.8em;
+        letter-spacing: 3px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
+
+    /* ===== Nav ===== */
+    nav.main-nav {
+        position: fixed;
+        top: 70px;
+        width: 100%;
+        background: #182823;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+        z-index: 950;
+        padding: 6px 0 10px;
+    }
+
+    ul.drop-down-menu {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    ul.drop-down-menu > li {
+        position: relative;
+    }
+
+    ul.drop-down-menu a {
+        background: #275344;
+        border: 1.5px solid #e5cda1;
+        border-radius: 999px;
+        padding: 7px 20px;
+        min-width: 140px;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        color: #fef9ec;
+        transition: 0.25s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.45);
+    }
+
+    ul.drop-down-menu a:hover {
+        background: #35715a;
+        border-color: #f5ddaa;
+        color: #fffdf3;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+    }
+	/* 第二層下拉 */
+	ul.drop-down-menu ul {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		display: none;
+		padding: 8px 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	ul.drop-down-menu li:hover > ul {
+		display: block;
+	}
+
+	/* === 第三層：固定水平、從右側展開 === */
+	ul.drop-down-menu ul ul {
+		position: absolute;
+		top: 0;          /* 永遠與第二層等高 */
+		left: 100%;      /* 從右側展開 */
+		padding-left: 8px;
+	}
+
+	/* 第二層選單外觀 */
+	ul.drop-down-menu ul a {
+		min-width: 170px;
+		background: #1a2d26;
+		border-radius: 10px;
+		border: 1px solid #d9c18e;
+		font-size: 13px;
+	}
+
+	/* 第三層外觀 */
+	ul.drop-down-menu ul ul a {
+		min-width: 170px;
+		background: #14241f;
+		border: 1px solid #c8b78d;
+	}
+    .arrow-down {
+        border-top: 6px solid #fdf6e4;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        display: inline-block;
+        margin-left: 6px;
+    }
+
+    .arrow-right {
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 6px solid #fdf6e4;
+        display: inline-block;
+        margin-left: 6px;
+    }
+
+    /* ===== 主內容 ===== */
+    article {
+        position: absolute;
+        top: 125px;
+        left: 0;
+        width: 70%;
+        height: calc(100% - 125px - 130px); /* 扣掉 header/nav/footer */
+        padding: 24px 26px;
+        background: #f7efe2;
+        color: #111827;
+        border-radius: 0 18px 0 0;
+        box-shadow: 4px 0 16px rgba(0,0,0,0.25);
+        overflow: auto;
+    }
+    article section {
+        margin-bottom: 26px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e3d5c5;
+    }
+    article section:last-of-type {
+        border-bottom: none;
+    }
+
+    article h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.4em;
+        color: #111827;
+        border-left: 4px solid #8b3b2c;
+        padding-left: 8px;
+    }
+
+    article h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.1em;
+        color: #374151;
+    }
+
+    .info-card {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff9ef;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+
+    .info-card p {
+        margin: 4px 0;
+        line-height: 1.7;
+        font-size: 0.95em;
+        color: #374151;
+    }
+    /* ===== 右側欄 ===== */
+    aside {
+        position: absolute;
+        top: 125px;
+        left: 70%;
+        width: 30%;
+        height: calc(100% - 125px - 130px);
+        padding: 18px 18px 12px;
+        background: #141917;
+        border-left: 1px solid #38433f;
+        overflow: auto;
+        color: #e5e7eb;
+    }
+
+    aside h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: #f3f4f6;
+    }
+
+    aside p {
+        margin: 4px 0;
+        font-size: 0.9em;
+        color: #d1d5db;
+    }
+    .image-area {
+        margin-top: 12px;
+        border-radius: 18px;
+        min-height: 200px;
+        background: radial-gradient(circle at top,#3b5d4d,#0f1513);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e5e7eb;
+        font-size: 0.9em;
+        text-align: center;
+        padding: 8px;
+    }
+	/* 所有圖片共用 hover 變形效果 */
+	img:hover {
+		transform: scale(1.07) rotate(1.5deg);
+		border-radius: 26px !important;
+		box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+		transition: 0.35s ease;
+	}
+	#music {
+    text-align: center;
+	}
+		/* 整個區塊美化 */
+	.pretty-section {
+		max-width: 650px;
+		margin: auto;
+		padding: 25px;
+		background: #ffffffdd;
+		backdrop-filter: blur(3px);
+		border-radius: 18px;
+		box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+		text-align: center;
+		line-height: 1.8;
+		font-size: 18px;
+	}
+
+	/* 圖片外框 */
+	.photo-frame {
+		margin-top: 20px;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 18px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+	}
+
+	/* 相片列 */
+	.photos img {
+		width: 100%;
+		display: none;
+	}
+
+	/* 顯示的那張 */
+	:target {
+		display: block;
+	}
+
+	/* 第一張預設顯示 */
+	#p1 {
+		display: block;
+	}
+		#photoBox {width:600px; height:300px; background-color:#ffa64d; margin-left:auto; margin-right:auto; position:relative;}
+        #photoBox .photos {width:600px; height:300px; overflow:hidden;}
+        #photoBox img {width:300px; height:300px; border-radius:50%; object-fit:cover;}
+        #photoBox img:hover {clip-path:inset(35px 15px 35px 15px); height:350px; transform:translateY(-25px);}
+        #photoBox ul {position:absolute; right:20px; bottom:10px;}
+        #photoBox ul li {width:30px; height:30px; margin:0 2px; float:left; list-style:none; text-align:center; line-height:30px; background-color:blue; color:rgba(162,217,102,0.5);}
+       
+        #photoBox ul li:hover {background:green;}
+        #photoBox ul li a {color:#ffffff; text-decoration:none;
+	}
+		
+	#photoBox .photos img {
+		display: none;
+	}
+
+	#photoBox .photos img:target {
+		display: block;
+	}
+
+	#p1 { /* 預設顯示第一張 */
+		display: block;
+	}
+
+	.music-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 20px;    /* 每個項目間距 */
+		margin-top: 20px;
+	}
+
+	.music-item {
+		width: 45%;   /* 兩個一排 */
+		min-width: 250px;
+	}
+
+	.music-item audio {
+		width: 100%;
+	}
+
+	#video .info-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	#video .main-video {
+		width: 100%; /* 使主影片寬度佔滿半螢幕 */
+		margin-bottom: 20px; /* 主影片底部間距 */
+	}
+
+	#video .side-videos {
+		display: flex;
+		justify-content: space-between;
+		gap: 2%; /* 兩個小影片之間的間距 */
+	}
+
+	#video .side-videos video {
+		width: 48%; /* 兩個影片佔總寬度的48% */
+	}
+	/* 主影片：半個螢幕高度＋滿版呈現 */
+	#video .main-video video {
+		width: 100%;
+		height: 50vh; /* 🔥 半螢幕高度 */
+		object-fit: cover; /* 避免影片變形 */
+		border-radius: 14px;
+		box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+	}
+
+	/* === 放大影片控制按鈕（Chrome / Edge） === */
+	video::-webkit-media-controls-panel {
+		padding: 18px !important;    /* 🔥 加大整個控制列區域 */
+	}
+
+	video::-webkit-media-controls-play-button,
+	video::-webkit-media-controls-volume-slider-container,
+	video::-webkit-media-controls-timeline {
+		transform: scale(1.4);       /* 🔥 放大按鈕 */
+		margin: 6px;
+	}
+
+	/* Firefox（控制列放大） */
+	video {
+		--media-controls-padding: 20px;
+		--media-controls-button-size: 32px;
+	}
+
+	/* ===== Footer：新版（照片在上 → 文字在下） ===== */
+	footer {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 130px;
+		background-color: #3b241a; /* 深棕色，與軍綠主色有區隔 */
+		color: #fdf5e6;
+		box-shadow: 0 -4px 12px rgba(0,0,0,0.7);
+		z-index: 900;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.footer-inner {
+		width: 100%;
+		height: 100%;
+		max-width: 1200px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start; /* 讓跑馬燈在最上面 */
+		align-items: center;
+		padding: 8px 16px 4px;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	/* === 跑馬燈區塊（最上面） === */
+	.footer-marquee {
+		width: 100%;
+		overflow: hidden;
+		margin-bottom: 6px; /* 與文字區間隔 */
+	}
+
+	.footer-marquee marquee {
+    width: 100%;
+    white-space: nowrap;
+    line-height: normal;			
+	}
+
+	/* 照片造型與互動效果 */
+	.footer-marquee img {
+		width: 90px;
+		height: 80px;
+		object-fit: cover;
+		margin: 0 6px;
+		transition: 0.35s ease;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.55);
+	}
+
+	/* 1：圓角矩形 */
+	.footer-marquee img:nth-of-type(1) {
+		border-radius: 14px;
+	}
+	.footer-marquee img:nth-of-type(1):hover {
+		transform: translateY(-4px) scale(1.05);
+	}
+
+	/* 2：圓形 */
+	.footer-marquee img:nth-of-type(2) {
+		border-radius: 50%;
+	}
+	.footer-marquee img:nth-of-type(2):hover {
+		transform: translateY(-4px) scale(1.08);
+	}
+
+	/* 3：膠囊形 */
+	.footer-marquee img:nth-of-type(3) {
+		border-radius: 999px 18px 999px 18px;
+	}
+	.footer-marquee img:nth-of-type(3):hover {
+		transform: translateY(-6px) scale(1.07);
+	}
+
+	/* 4：斜切角 */
+	.footer-marquee img:nth-of-type(4) {
+		border-radius: 18px 6px 18px 6px;
+	}
+	.footer-marquee img:nth-of-type(4):hover {
+		transform: translateY(-5px) scale(1.06);
+	}
+	.footer-marquee img:nth-of-type(5) {
+		border-radius: 14px;
+	}
+	.footer-marquee img:nth-of-type(5):hover {
+		transform: translateY(-4px) scale(1.05);
+	}
+	.footer-marquee img:nth-of-type(6) {
+		border-radius: 50%;
+	}
+	.footer-marquee img:nth-of-type(6):hover {
+		transform: translateY(-4px) scale(1.08);
+	}
+
+	/* 精選甜點連結 */
+	.footer-marquee a {
+		color: #ffe7c2;
+		font-size: 0.9em;
+		margin-left: 6px;
+		text-decoration: none;
+	}
+	.footer-marquee a:hover {
+		text-decoration: underline;
+	}
+
+	/* === 文字介紹區（在跑馬燈下面） === */
+	.footer-title {
+		font-family: "Cinzel Decorative", "Noto Serif TC", serif;
+		font-size: 1.05em;
+		letter-spacing: 2px;
+		margin: 0;
+	}
+
+	.footer-subtitle {
+		font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+		font-size: 0.82em;
+		margin: 2px 0 0;
+		color: #ffe4c4;
+	}
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⚔ 進擊的巨人 動漫介紹</h1>
+</header>
+
+<nav class="main-nav">
+    <ul class="drop-down-menu">
+        <li><a href="#intro">基本介紹</a></li>
+        <li><a href="#author">作者介紹</a></li>
+        <!-- 三層下拉 1：世界觀 -->
+        <li>
+			<a href="#world">世界觀<div class="arrow-down"></div></a>
+			<ul>
+				<li><a href="#history">歷史真相</a></li>
+				<li><a href="#theme">自由與束縛</a></li>
+				<!-- 巨人種類 -->
+				<li>
+					<a href="#titan">巨人種類<div class="arrow-right"></div></a>
+					<ul>
+						<li><a href="#b1">純潔巨人</a></li>
+						<li><a href="#b2">九大巨人</a></li>
+						<li><a href="#b3">超大型巨人</a></li>
+					</ul>
+				</li>
+
+				<!-- 城牆結構 -->
+				<li>
+					<a href="#wall">城牆結構與生活<div class="arrow-right"></div></a>
+					<ul>
+						<li><a href="#a1">瑪利亞之牆</a></li>
+						<li><a href="#a2">羅塞之牆</a></li>
+						<li><a href="#a3">希娜之牆</a></li>
+					</ul>
+				</li>
+			</ul>
+	</li>
+
+        <!-- 三層下拉 2：角色介紹 -->
+        <li>
+            <a href="#characters">角色介紹<div></div></a>
+            <ul>
+                <li>
+                    <a href="#eren">艾連・葉卡<div></div></a>
+                </li>
+
+                <li>
+                    <a href="#mikasa">三笠・阿克曼<div></div></a>
+                </li>
+
+                <li><a href="#armin">阿爾敏・亞魯雷特</a></li>
+                <li><a href="#levi">里維・阿克曼</a></li>
+				<li><a href="#Annie Leonhart">亞妮·雷恩哈特</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#music">音樂賞析</a></li>
+        <li><a href="#video">影片欣賞</a></li>
+    </ul>
+</nav>
+
+<article>
+    <section id="intro">
+        <h2>基本介紹</h2>
+        <div class="info-card">
+            <p>《進擊的巨人》的故事圍繞著一個被三道巨大城牆包圍的人類社會展開。</p>
+			<p>人類多年來一直生活在城牆內，原因是城牆外的世界充滿了食人的巨人。</p>
+			<p>某天，一個前所未見的超大型巨人突然出現，打破了原本的和平，也粉碎了人們一直以來的安全感。</p>
+<p>從那一刻起，主角艾連與他的朋友三笠、阿爾敏決定加入調查兵團，踏上奪回世界的道路。</p>
+<p>他們在戰鬥中逐漸接觸到關於巨人的真相、城牆的秘密，甚至是人類歷史深處的黑暗。</p>
+<p>隨著劇情推進，故事不只是描寫人類與巨人的對抗 更深入探討戰爭、自由、人性、選擇與犧牲，讓整部作品充滿張力與深度。</p>
+        </div>
+    </section>
+
+    <section id="author" >
+        <h2>作者介紹</h2>
+        <div class="info-card">
+            <p><strong>作者：</strong>諫山創（Hajime Isayama）是日本漫畫家，出生於 1986 年。
+			<p>他從高中時期就開始練習漫畫創作 而《進擊的巨人》是他的代表作品 也是讓他在漫畫界受到極高注目的作品。</p>
+<p>諫山創的風格以濃厚的壓迫感、伏筆鋪陳與世界觀構築聞名。</p>
+<p>他擅長描寫角色的內心衝突與人性掙扎，並以獨特的敘事方式讓讀者逐步理解故事背後更深層的主題。</p>
+<p>《進擊的巨人》在連載期間便引發廣泛討論</p>
+<p>不只因為劇情緊湊，更因作品中對自由、戰爭與人類本質的探問</p>
+<p>讓許多讀者深受觸動。諫山創也因這部作品獲得多項獎項 成為現代漫畫界備受注目的創作者之一。</p>
+		</div>
+    </section>
+
+    <section id="world">
+	<section id="history">
+		<h3>歷史真相</h3>
+		<div class="info-card">
+			<p>原本以為的世界只是「城牆保護下的人類」；但真相揭開後，會發現世界的規模與敵意遠超想像。這種落差帶來強烈衝擊，也讓人重新思考「誰才是真正的敵人」。</p>
+		</div>
+	</section>
+    <section id="theme">
+        <h3>自由與束縛</h3>
+        <div class="info-card">
+            <p>《進擊的巨人》讓我明白，自由不是離開城牆，而是能選擇自己想走的路。</p>
+<p>那些角色望向牆外的瞬間，讓我感受到追求自由需要勇氣與代價。</p>
+        </div>
+    </section>
+    <h2>世界觀與背景</h2>
+		<div class="info-card">
+			<p>故事發生在人類被三道巨大城牆包圍的世界中。牆內是人類所剩不多的安全地帶，牆外則充滿未知與巨大的威脅。整體氛圍壓迫、封閉，而人們對自由的渴望反而因此更加強烈。</p>
+		</div>
+	</section>
+	<section id="titan">
+    <h3>巨人種類</h3>
+		<div class="info-card">
+			<p>巨人的外型與行動方式多樣，有的笨拙、有的快速且危險。牠們代表著人類無法理解的恐懼來源，也象徵故事中那份「未知壓迫」。</p>
+		</div>
+	</section>
+	<section id="b1">
+    <h3>純潔巨人</h3>
+		<div class="info-card">
+			<p>數量最多、行動不可預測，是威脅最直接的存在。牠們的外觀詭異，也讓作品的壓迫感更強烈。</p>
+		</div>
+	</section>
+    <section id="history">
+        <h3>歷史與真相</h3>
+        <div class="info-card">
+            <p>用不爆雷或少爆雷的方式，說明「一開始以為的世界」和「看到真相後的世界」有什麼差異，重點放在你的感受。</p>
+        </div> 
+		</section>
+		<section id="b2">
+    <h3>九大巨人</h3>
+		<div class="info-card">
+			<p>具有特殊能力與智慧，是推動故事主線的重要力量。每一位繼承者都對世界有不同的影響。</p>
+		</div>
+	</section>
+	<section id="b3">
+    <h3>超大型巨人</h3>
+		<div class="info-card">
+			<p>體型巨大、破壞力驚人，是整部作品最具象徵性的威脅之一。</p>
+		</div>
+	</section>
+    <section id="wall">
+    <h3>城牆結構與生活</h3>
+		<div class="info-card">
+			<p>三道城牆分層保護著人類。越靠外的城牆生活較貼近危險，而內圈則較富裕、安全。但在城牆裡生活，也意味著一生都看不到真正的世界，宛如被保護、同時也被限制的鳥籠。</p>
+		</div>
+	</section>
+	<section id="a1">
+    <h3>瑪利亞之牆</h3>
+		<div class="info-card">
+			<p>最外層的城牆，農業區最多、人類活動最廣。因為最貼近外界，也最常面臨未知威脅。</p>
+		</div>
+	</section>
+	<section id="a2">
+    <h3>羅塞之牆</h3>
+		<div class="info-card">
+			<p>第二層城牆，是人類主要的居住範圍。安全性較高，但也因人口密集而充滿壓力。</p>
+		</div>
+	</section>
+	<section id="a3">
+    <h3>希娜之牆</h3>
+		<div class="info-card">
+			<p>最內層的城牆，象徵權力與 privilege。高階階層居住於此，與外界的恐懼距離最遠。</p>
+		</div>
+	</section>
+    <section id="characters">
+        <h2>主要角色介紹</h2>
+        <div class="info-card">
+			<div class="info-card pretty-section">
+			<main>
+			<div id="photoBox">
+                <div class="photos">
+                    <img src="image/03.jpg" id="p1">
+                    <img src="image/05.jpg" id="p2">
+                    <img src="image/04.jpg" id="p3">
+                    <img src="image/02.jpg" id="p4">
+                </div>
+                <ul>
+                    <li><a href="#p1">1</a></li>
+                    <li><a href="#p2">2</a></li>
+                    <li><a href="#p3">3</a></li>
+                    <li><a href="#p4">4</a></li>
+                </ul>
+            </div>
+			</main>
+			</div>
+        </div><br><br><br>
+    </section>
+
+    <section id="eren">
+    <h3>艾連・葉卡</h3>
+
+    <div class="character-box">
+
+        <div class="character-img">
+            <img src="image/08.jpg" alt="艾連">
+        </div>
+        <div class="character-text">
+            <p>艾連從小具有強烈的自由意志，他不願意被困在城牆的世界中，認為「活著不是被關在籠子裡」。</p>
+			<p>隨著故事推展，他的選擇變得更加沉重，也背負起人類存亡的責任。</p>
+            <p>他的成長充滿矛盾、猶豫與覺醒，是整部作品最具衝突與深度的角色之一。</p>
+			<p>隨著劇情推進，他越來越清楚自由的代價，也開始背負整個世界的重量。</p>
+        </div>
+    </div>
+	</section>
+    <section id="mikasa">
+        <h3>三笠・阿克曼</h3>
+        <div class="character-box">
+            <div class="character-img">
+                <img src="image/07.jpg" alt="三笠">
+            </div>
+            <div class="character-text">
+                <p>因兒時事件失去雙親，被艾連一家收留，因此艾連對她而言是家庭、是依靠。</p>
+                <p>表面冷靜沉著、戰鬥天賦極高，被稱為「人類最強女性」之一。</p>
+                <p>她的內心其實很敏感、很溫柔，只是將脆弱全部藏起來。</p>
+                <p>她與艾連的關係是作品中最沉重也最重要的一條情感線。</p>
+                <p>三笠象徵：「強大外殼下，被愛與羈絆束縛的心」。</p>
+            </div>
+        </div>
+    </section>
+    <section id="armin">
+    <h3>阿爾敏・亞魯雷特</h3>
+    <div class="character-box">
+
+        <div class="character-img">
+            <img src="image/06.jpg" alt="阿爾敏">
+        </div>
+        <div class="character-text">
+           <p>身體素質普通，但擁有超越同齡人的判斷力、推理能力與宏觀視野。</p>
+           <p>他常常用邏輯突破困境，用想法拯救同伴。</p>
+           <p>阿爾敏最大的力量不是天生，而是「願意面對恐懼的勇氣」。</p>
+           <p>他象徵作品中的人性光點：</p>
+           <p>在混亂與殘酷中仍選擇相信更好的未來。</p>
+        </div>
+	</div>
+	</section>
+
+    <section id="levi">
+        <h3>里維・阿克曼</h3>
+        <div class="character-box">
+
+        <div class="character-img">
+            <img src="image/05.jpg" alt="艾連">
+        </div>
+        <div class="character-text">
+            <p>調查兵團的象徵性人物，也是「人類最強士兵」。</p>       
+			<p>對於部下與團長有深厚的責任感，他的冷酷其實是一種「保護」。</p>
+			<p>名場面非常多，深受觀眾喜愛，被視為整部作品的精神支柱之一。</p>
+			<p>里維象徵：「即使世界殘破，仍維持信念與行動的人」</p>
+        </div>
+    </section>
+	<section id="Annie Leonhart">
+        <h3>亞妮·雷恩哈特</h3>
+        <div class="character-box">
+            <div class="character-img">
+                <img src="image/16.jpg" alt="亞妮·雷恩哈特">
+            </div>
+            <div class="character-text">
+                <p>第104期訓練軍團第4名畢業，擁有強大的格鬥術，在格鬥能力方面無人能及。</p>
+				<p>性格過於孤僻，自己喜歡獨立行動</p>
+				<p>能在單獨的任務中發揮強大力量</p>
+				<p>在組織內行動反而會被埋沒，成為毫無長處的士兵</p>
+				<p>將任務交給她的時候應該仔細斟酌任務的內容。</p>
+            </div>
+        </div>
+    </section>
+    <section id="music">
+    <h2>音樂賞析</h2>
+	<div class="info-card">
+		<div class="music-grid">
+			<div class="music-item">
+				<p><strong>紅蓮の弓矢</strong></p>
+				<audio src="music/紅蓮の弓矢.mp3" controls></audio>
+			</div>
+
+			<div class="music-item">
+				<p><strong>Call of Silence</strong></p>
+				<audio src="music/Call of Silence.mp3" controls></audio>
+			</div>
+
+			<div class="music-item">
+				<p><strong>悪魔の子</strong></p>
+				<audio src=".music/悪魔の子.mp3" controls></audio>
+			</div>
+			<div class="music-item">
+				<p><strong>心臓を捧げよ！</strong></p>
+				<audio src="music/心臓を捧げよ！.m4a" controls></audio>
+			</div>
+		</div>
+	</div>
+	</section>
+   <section id="video">
+    <h2>影片欣賞</h2>
+		<div class="info-card">
+			<div class="main-video">
+				<video src="video/00.mp4"
+					   controls
+					   autoplay
+					   muted
+					   playsinline>
+				</video>
+			</div>
+
+			
+			<!-- 🎥 併排的兩個影片 -->
+			<div class="side-videos">
+				<video src="video/01.mp4"
+					   controls 
+					   width="48%" 
+					   style="border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.25);">
+				</video>
+				<video src="video/02.mp4"
+					   controls 
+					   width="48%" 
+					   style="border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.25);">
+				</video>
+			</div>
+		</div>
+	</section>
+</article>
+
+<aside>
+    <h2>作品視覺展示</h2>
+
+    <div class="slide-wrap">
+        <a><img src="image/00.jpg"></a>
+        <a><img src="image/01.jpg"></a>
+        <a><img src="image/02.jpg"></a>
+        <a><img src="image/03.jpg"></a>
+        <a><img src="image/04.jpg"></a>
+    </div>
+</aside>
+
+<footer>
+    <div class="footer-inner">
+
+        <!-- 跑馬燈區（最上方） -->
+        <div class="footer-marquee">
+            <marquee behavior="alternate" scrollamount="8"
+                     onmouseover="this.stop()" onmouseout="this.start()">
+                <img src="image/10.jpg" alt="pic1">
+                <img src="image/11.jpg" alt="pic2">
+                <img src="image/12.jpg" alt="pic3">
+                <img src="image/13.jpg" alt="pic4">
+				<img src="image/14.jpg" alt="pic5">
+                <a href="https://zh.wikipedia.org/zh-tw/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA" target="_blank">(๑´ㅁ`)</a>
+            </marquee>
+        </div>
+
+        <!-- 作品介紹文字（跑馬燈下面） -->
+        <p class="footer-title">進擊的巨人</p>
+        <p class="footer-subtitle">Attack on Titan｜網頁期末作品</p>
+
+    </div>
+</footer>
+</body>
+</html>

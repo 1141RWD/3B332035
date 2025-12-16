@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>互動式圖片頁面</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+
+        /* ---- 背景圖片（你可自行替換） ---- */
+        background-image: url("image/三城牆圖片.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 外層容器：讓三張圖片並排 */
+    .container {
+        display: flex;
+        gap: 40px;
+    }
+
+    /* 可點擊圖片 */
+    .click-img {
+        width: 180px;       /* 可調大小 */
+        height: auto;
+        cursor: pointer;
+        transition: transform 0.25s ease;
+    }
+
+    /* 滑過時放大效果 */
+    .click-img:hover {
+        transform: scale(1.1);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 你自己的三張可點圖片 -->
+    <img src="圖片/iphone_17.jpg" class="click-img" onclick="clicked(1)">
+    <img src="圖片/iphone_17pro.jpg" class="click-img" onclick="clicked(2)">
+    <img src="圖片/iphone_air.jpg" class="click-img" onclick="clicked(3)">
+
+</div>
+
+<script>
+    function clicked(num) {
+        alert("你按了第 " + num + " 張圖片！");
+        // 你也可以設定跳頁，例如：
+        // window.location.href = "page" + num + ".html";
+    }
+</script>
+
+</body>
+</html>

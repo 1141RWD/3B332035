@@ -101,8 +101,6 @@
 	/* 滑鼠移到圖片時暫停動畫 */
 	.home-picture img:hover {
 		animation-play-state: paused;
-
-		/* 額外的外型變化 */
 		transform: scale(1.1); /* 放大 */
 		filter: brightness(1.2); /* 變亮 */
 		border: 3px solid rgba(255, 255, 255, 0.8);
@@ -194,14 +192,6 @@
 		display: block;
 	}
 
-	/* === 第三層：固定水平、從右側展開 === */
-	ul.drop-down-menu ul ul {
-		position: absolute;
-		top: 0;          /* 永遠與第二層等高 */
-		left: 100%;      /* 從右側展開 */
-		padding-left: 8px;
-	}
-
 	/* 第二層選單外觀 */
 	ul.drop-down-menu ul a {
 		min-width: 170px;
@@ -221,6 +211,13 @@
 		left: 100%;    /* 從右側展開 */
 		padding-left: 0;
 		display: none; /* 初始隱藏 */
+	}
+
+	/* 第三層外觀 */
+	ul.drop-down-menu ul ul a {
+		min-width: 170px;
+		background: #14241f;
+		border: 1px solid #c8b78d;
 	}
     .arrow-down {
         border-top: 6px solid #fdf6e4;
@@ -364,35 +361,72 @@
 		width: 100%;
 		display: none;
 	}
-
-	/* 顯示的那張 */
-	:target {
-		display: block;
-	}
-
 	/* 第一張預設顯示 */
 	#p1 {
 		display: block;
 	}
-		#photoBox {width:600px; height:300px; background-color:#ffa64d; margin-left:auto; margin-right:auto; position:relative;}
-        #photoBox .photos {width:600px; height:300px; overflow:hidden;}
-        #photoBox img {width:300px; height:300px; border-radius:50%; object-fit:cover;}
-        #photoBox img:hover {clip-path:inset(35px 15px 35px 15px); height:350px; transform:translateY(-25px);}
-        #photoBox ul {position:absolute; right:20px; bottom:10px;}
-        #photoBox ul li {width:30px; height:30px; margin:0 2px; float:left; list-style:none; text-align:center; line-height:30px; background-color:blue; color:rgba(162,217,102,0.5);}
-       
-        #photoBox ul li:hover {background:green;}
-        #photoBox ul li a {color:#ffffff; text-decoration:none;
+	/* ==== #photoBox 圓形照片輪播 ==== */
+	#photoBox .photos {
+		width: 300px;
+		height: 300px;
+		margin: auto;
+		border-radius: 50%;          /* 圓形遮罩 */
+		overflow: hidden;
+		position: relative;
+		background-color: #a5d8ff;   /* 圓形底色，可改 */
 	}
-		
+
+	/* 所有圖片預設隱藏 */
 	#photoBox .photos img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 		display: none;
 	}
 
+	/* 被點擊的那張顯示 */
 	#photoBox .photos img:target {
 		display: block;
 	}
 
+	/* 預設顯示第一張 */
+	#photoBox .photos img:first-child {
+		display: block;
+	}
+
+	/* 數字按鈕 */
+	#photoBox ul {
+		position: absolute;
+		right: 20px;
+		bottom: 10px;
+		z-index: 10;
+	}
+
+	#photoBox ul li {
+		width: 30px;
+		height: 30px;
+		margin: 0 2px;
+		float: left;
+		list-style: none;
+		text-align: center;
+		line-height: 30px;
+		background-color: #8b5cf6; /* 紫色 */
+		border-radius: 50%;
+		transition: 0.3s;
+	}
+
+	#photoBox ul li a {
+		display: block;
+		width: 100%;
+		height: 100%;
+		color: white;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	#photoBox ul li:hover {
+		background-color: #f59e0b; /* 橘色 */
+	}
 	#p1 { /* 預設顯示第一張 */
 		display: block;
 	}
@@ -404,6 +438,7 @@
 		gap: 20px;    /* 每個項目間距 */
 		margin-top: 20px;
 	}
+	
 
 	.music-item {
 		width: 45%;   /* 兩個一排 */
@@ -414,48 +449,72 @@
 		width: 100%;
 	}
 
+	/* 整體排版 */
 	#video .info-card {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		gap: 20px;
 	}
 
+	/* 主影片 */
 	#video .main-video {
-		width: 100%; /* 使主影片寬度佔滿半螢幕 */
-		margin-bottom: 20px; /* 主影片底部間距 */
+		position: relative; /* 讓標題絕對定位 */
+		width: 100%;
 	}
 
-	#video .side-videos {
-		display: flex;
-		justify-content: space-between;
-		gap: 2%; /* 兩個小影片之間的間距 */
-	}
-
-	#video .side-videos video {
-		width: 48%; /* 兩個影片佔總寬度的48% */
-	}
-	/* 主影片：半個螢幕高度＋滿版呈現 */
 	#video .main-video video {
 		width: 100%;
-		height: 50vh; /* 🔥 半螢幕高度 */
-		object-fit: cover; /* 避免影片變形 */
+		height: 50vh;               /* 半螢幕高度 */
+		object-fit: cover;          /* 避免影片變形 */
+		border: 6px solid #234236;  /* 邊框 */
 		border-radius: 14px;
 		box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 	}
 
-	/* === 放大影片控制按鈕（Chrome / Edge） === */
+	/* 標題融入邊框 */
+	#video .main-video .video-title {
+		position: absolute;
+		top:: -6px;              /* 貼近邊框 */
+		left: 0;
+		width: 100%;
+		background: #234236;       /* 與邊框同色 */
+		color: #fff;
+		text-align: center;
+		padding: 6px 0;
+		border-top:-left-radius: 14px;
+		border-top:-right-radius: 14px;
+		font-weight: bold;
+		font-size: 1rem;
+	}
+
+	/* 側邊影片排列 */
+	#video .side-videos {
+		display: flex;
+		justify-content: space-between;
+		gap: 2%;
+		width: 100%;
+	}
+
+	#video .side-videos video {
+		width: 32%;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+	}
+
+	/* 控制列放大 (Chrome / Edge) */
 	video::-webkit-media-controls-panel {
-		padding: 18px !important;    /* 🔥 加大整個控制列區域 */
+		padding: 18px !important;
 	}
 
 	video::-webkit-media-controls-play-button,
 	video::-webkit-media-controls-volume-slider-container,
 	video::-webkit-media-controls-timeline {
-		transform: scale(1.4);       /* 🔥 放大按鈕 */
+		transform: scale(1.4);
 		margin: 6px;
 	}
 
-	/* Firefox（控制列放大） */
+	/* 控制列放大 (Firefox) */
 	video {
 		--media-controls-padding: 20px;
 		--media-controls-button-size: 32px;
@@ -652,9 +711,9 @@
             <p>《進擊的巨人》的故事圍繞著一個被三道巨大城牆包圍的人類社會展開。</p>
 			<p>人類多年來一直生活在城牆內，原因是城牆外的世界充滿了食人的巨人。</p>
 			<p>某天，一個前所未見的超大型巨人突然出現，打破了原本的和平，也粉碎了人們一直以來的安全感。</p>
-			<p>從那一刻起，主角艾連與他的朋友三笠、阿爾敏決定加入調查兵團，踏上奪回世界的道路。</p>
-			<p>他們在戰鬥中逐漸接觸到關於巨人的真相、城牆的秘密，甚至是人類歷史深處的黑暗。</p>
-			<p>隨著劇情推進，故事不只是描寫人類與巨人的對抗 更深入探討戰爭、自由、人性、選擇與犧牲，讓整部作品充滿張力與深度。</p>
+            <p>從那一刻起，主角艾連與他的朋友三笠、阿爾敏決定加入調查兵團，踏上奪回世界的道路。</p>
+            <p>他們在戰鬥中逐漸接觸到關於巨人的真相、城牆的秘密，甚至是人類歷史深處的黑暗。</p>
+            <p>隨著劇情推進，故事不只是描寫人類與巨人的對抗 更深入探討戰爭、自由、人性、選擇與犧牲，讓整部作品充滿張力與深度。</p>
         </div>
     </section>
 
@@ -663,11 +722,11 @@
         <div class="info-card">
             <p><strong>作者：</strong>諫山創（Hajime Isayama）是日本漫畫家，出生於 1986 年。
 			<p>他從高中時期就開始練習漫畫創作 而《進擊的巨人》是他的代表作品 也是讓他在漫畫界受到極高注目的作品。</p>
-			<p>諫山創的風格以濃厚的壓迫感、伏筆鋪陳與世界觀構築聞名。</p>
-			<p>他擅長描寫角色的內心衝突與人性掙扎，並以獨特的敘事方式讓讀者逐步理解故事背後更深層的主題。</p>
-			<p>《進擊的巨人》在連載期間便引發廣泛討論</p>
-			<p>不只因為劇情緊湊，更因作品中對自由、戰爭與人類本質的探問</p>
-			<p>讓許多讀者深受觸動。諫山創也因這部作品獲得多項獎項 成為現代漫畫界備受注目的創作者之一。</p>
+            <p>諫山創的風格以濃厚的壓迫感、伏筆鋪陳與世界觀構築聞名。</p>
+            <p>他擅長描寫角色的內心衝突與人性掙扎，並以獨特的敘事方式讓讀者逐步理解故事背後更深層的主題。</p>
+            <p>《進擊的巨人》在連載期間便引發廣泛討論</p>
+            <p>不只因為劇情緊湊，更因作品中對自由、戰爭與人類本質的探問</p>
+            <p>讓許多讀者深受觸動。諫山創也因這部作品獲得多項獎項 成為現代漫畫界備受注目的創作者之一。</p>
 		</div>
     </section>
 
@@ -682,7 +741,7 @@
         <h3>自由與束縛</h3>
         <div class="info-card">
             <p>《進擊的巨人》讓我明白，自由不是離開城牆，而是能選擇自己想走的路。</p>
-			<p>那些角色望向牆外的瞬間，讓我感受到追求自由需要勇氣與代價。</p>
+<p>那些角色望向牆外的瞬間，讓我感受到追求自由需要勇氣與代價。</p>
         </div>
     </section>
     <h2>世界觀與背景</h2>
@@ -744,6 +803,30 @@
 			<p>最內層的城牆，象徵權力與 privilege。高階階層居住於此，與外界的恐懼距離最遠。</p>
 		</div>
 	</section>
+    <section id="characters">
+        <h2>主要角色介紹</h2>
+        <div class="info-card">
+			<div class="info-card pretty-section">
+			<main>
+			<div id="photoBox">
+                <div class="photos">
+                    <img src="image/17.jpg" id="p1">
+                    <img src="image/18.jpg" id="p2">
+                    <img src="image/19.jpg" id="p3">
+                    <img src="image/20.jpg" id="p4">
+                </div>
+                <ul>
+                    <li><a href="#p1">1</a></li>
+                    <li><a href="#p2">2</a></li>
+                    <li><a href="#p3">3</a></li>
+                    <li><a href="#p4">4</a></li>
+                </ul>
+            </div>
+			</main>
+			</div>
+        </div><br><br><br>
+    </section>
+
     <section id="eren">
     <h3>艾連・葉卡</h3>
 
@@ -837,7 +920,7 @@
 
 			<div class="music-item">
 				<p><strong>悪魔の子</strong></p>
-				<audio src=".music/悪魔の子.mp3" controls></audio>
+				<audio src="music/悪魔の子.mp3" controls></audio>
 			</div>
 			<div class="music-item">
 				<p><strong>心臓を捧げよ！</strong></p>
@@ -850,11 +933,13 @@
     <h2>影片欣賞</h2>
 		<div class="info-card">
 			<div class="main-video">
+			<div class="video-title">半螢幕自動播放</div>
 				<video src="video/00.mp4"
 					   controls
 					   autoplay
 					   muted
-					   playsinline>
+					   playsinline
+					   loop>
 				</video>
 			</div>
 
@@ -898,15 +983,24 @@
                 <img src="image/12.jpg" alt="pic3">
                 <img src="image/13.jpg" alt="pic4">
 				<img src="image/14.jpg" alt="pic5">
+				<img src="image/15.jpg" alt="pic6">
                 <a href="https://zh.wikipedia.org/zh-tw/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA" target="_blank">(๑´ㅁ`)</a>
             </marquee>
         </div>
 
         <!-- 作品介紹文字（跑馬燈下面） -->
         <p class="footer-title">進擊的巨人</p>
-        <p class="footer-subtitle">Attack on Titan｜網頁期末作品</p>
+        <p class="footer-subtitle">Attack on Titan｜靜態網頁期末作品</p>
 
     </div>
 </footer>
+<script>
+    window.onload = function() {
+        // 如果當前 URL 中沒有 hash，則自動設置為 #p1
+        if (!window.location.hash) {
+            window.location.hash = 'p1';
+        }
+    };
+</script>
 </body>
 </html>

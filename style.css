@@ -1,146 +1,717 @@
-/* ===== 全域與基礎設定 ===== */
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-    margin: 0;
-    font-family: "Microsoft JhengHei", sans-serif;
-    background: linear-gradient(180deg,#f3ebdc 0%, #d0d6d1 40%, #181f1d 100%);
-    color: #111827;
-    min-height: 100vh;
+/* 右側欄輪播填滿設定 */
+	aside.slide-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%; /* 讓圖片填滿整個 aside */
+    overflow: hidden;
+	border-radius: 14px;
+	}
+
+	/* 每張輪播圖片 */
+	aside .slide-wrap a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: fadeSlide 20s linear infinite;
+	}
+
+	/* 填滿右側＋避免壓扁比例 */
+	aside .slide-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* 🔥 讓圖片填滿 */
+		transition: 0.4s ease;
+		border-radius: 16px;
+	}
+
+	/* 滑鼠移入圖片變形效果 */
+	aside .slide-wrap img:hover {
+	transform: scale(1.07) rotate(1.5deg); /* 🔥 造型變化 */
+	border-radius: 26px;                  /* 🔥 邊角自動變形 */
+	box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+	}
+
+	/* 輪播動畫 */
+	@keyframes fadeSlide {
+		3% {opacity: 1;}
+		18% {opacity: 1;}
+		20% {opacity: 0;}
+	}
+
+	aside .slide-wrap a:nth-child(1) { animation-delay: 0s; }
+	aside .slide-wrap a:nth-child(2) { animation-delay: 4s; }
+	aside .slide-wrap a:nth-child(3) { animation-delay: 8s; }
+	aside .slide-wrap a:nth-child(4) { animation-delay: 12s; }
+	aside .slide-wrap a:nth-child(5) { animation-delay: 16s; }
+
+	aside:hover .slide-wrap a {
+		animation-play-state: paused;
+	}
+
+	.character-box {
+		display: flex;
+		gap: 16px;
+		align-items: center; /* 讓文字與圖片垂直置中 */
+		background: #fff9ef;
+		padding: 16px;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+	}
+
+	/* 左邊文字 */
+	.character-text {
+		flex: 2;
+	}
+
+	/* 右邊圖片 */
+	.character-img {
+		flex: 1;
+		max-width: 180px;
+	}
+
+	.character-img img {
+		width: 100%;
+		border-radius: 12px;
+		object-fit: cover;
+	}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+        margin: 0;
+        font-family: "Microsoft JhengHei", sans-serif;
+        background: linear-gradient(180deg,#f3ebdc 0%, #d0d6d1 40%, #181f1d 100%);
+        color: #111827;
+    }
+	/* 滑鼠移到圖片時暫停動畫 */
+	.home-picture img:hover {
+		animation-play-state: paused;
+		transform: scale(1.1); /* 放大 */
+		filter: brightness(1.2); /* 變亮 */
+		border: 3px solid rgba(255, 255, 255, 0.8);
+		border-radius: 15px;
+	}
+
+    /* ===== Header ===== */
+    header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 70px;
+        background: #234236;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+        z-index: 1000;
+        color: #fdf9f0;
+    }
+    header h1 {
+        font-size: 1.8em;
+        letter-spacing: 3px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
+
+    /* ===== Nav ===== */
+    nav.main-nav {
+        position: fixed;
+        top: 70px;
+        width: 100%;
+        background: #182823;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+        z-index: 950;
+        padding: 6px 0 10px;
+    }
+
+    ul.drop-down-menu {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    ul.drop-down-menu > li {
+        position: relative;
+    }
+
+    ul.drop-down-menu a {
+        background: #275344;
+        border: 1.5px solid #e5cda1;
+        border-radius: 999px;
+        padding: 7px 20px;
+        min-width: 140px;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        color: #fef9ec;
+        transition: 0.25s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.45);
+    }
+
+    ul.drop-down-menu a:hover {
+        background: #35715a;
+        border-color: #f5ddaa;
+        color: #fffdf3;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.7);
+    }
+	/* 第二層下拉 */
+	ul.drop-down-menu ul {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		display: none;
+		padding: 8px 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	ul.drop-down-menu li:hover > ul {
+		display: block;
+	}
+
+	/* 第二層選單外觀 */
+	ul.drop-down-menu ul a {
+		min-width: 170px;
+		background: #1a2d26;
+		border-radius: 10px;
+		border: 1px solid #d9c18e;
+		font-size: 13px;
+	}
+	/* 父選單項目設定相對定位 */
+	ul.drop-down-menu ul li {
+		position: relative; /* 必須有這行 */
+	}
+	/* 第三層選單 */
+	ul.drop-down-menu ul ul {
+		position: absolute;
+		top: 0;        /* 或 top: 100%; 根據你想從哪裡開始 */
+		left: 100%;    /* 從右側展開 */
+		padding-left: 0;
+		display: none; /* 初始隱藏 */
+	}
+
+	/* 第三層外觀 */
+	ul.drop-down-menu ul ul a {
+		min-width: 170px;
+		background: #14241f;
+		border: 1px solid #c8b78d;
+	}
+    .arrow-down {
+        border-top: 6px solid #fdf6e4;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        display: inline-block;
+        margin-left: 6px;
+    }
+
+    .arrow-right {
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 6px solid #fdf6e4;
+        display: inline-block;
+        margin-left: 6px;
+    }
+
+    /* ===== 主內容 ===== */
+    article {
+        position: absolute;
+        top: 125px;
+        left: 0;
+        width: 70%;
+        height: calc(100% - 125px - 130px); /* 扣掉 header/nav/footer */
+        padding: 24px 26px;
+        background: #f7efe2;
+        color: #111827;
+        border-radius: 0 18px 0 0;
+        box-shadow: 4px 0 16px rgba(0,0,0,0.25);
+        overflow: auto;
+    }
+    article section {
+        margin-bottom: 26px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e3d5c5;
+    }
+    article section:last-of-type {
+        border-bottom: none;
+    }
+
+    article h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.4em;
+        color: #111827;
+        border-left: 4px solid #8b3b2c;
+        padding-left: 8px;
+    }
+
+    article h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.1em;
+        color: #374151;
+    }
+
+    .info-card {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff9ef;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+
+    .info-card p {
+        margin: 4px 0;
+        line-height: 1.7;
+        font-size: 0.95em;
+        color: #374151;
+    }
+    /* ===== 右側欄 ===== */
+    aside {
+        position: absolute;
+        top: 125px;
+        left: 70%;
+        width: 30%;
+        height: calc(100% - 125px - 130px);
+        padding: 18px 18px 12px;
+        background: #141917;
+        border-left: 1px solid #38433f;
+        overflow: hidden;
+        color: #e5e7eb;
+    }
+
+    aside h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        color: #f3f4f6;
+    }
+
+    aside p {
+        margin: 4px 0;
+        font-size: 0.9em;
+        color: #d1d5db;
+    }
+    .image-area {
+        margin-top: 12px;
+        border-radius: 18px;
+        min-height: 200px;
+        background: radial-gradient(circle at top,#3b5d4d,#0f1513);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e5e7eb;
+        font-size: 0.9em;
+        text-align: center;
+        padding: 8px;
+    }
+	/* 所有圖片共用 hover 變形效果 */
+	img:hover {
+		transform: scale(1.07) rotate(1.5deg);
+		border-radius: 26px !important;
+		box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+		transition: 0.35s ease;
+	}
+	#music {
+    text-align: center;
+	}
+		/* 整個區塊美化 */
+	.pretty-section {
+		max-width: 650px;
+		margin: auto;
+		padding: 25px;
+		background: #ffffffdd;
+		backdrop-filter: blur(3px);
+		border-radius: 18px;
+		box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+		text-align: center;
+		line-height: 1.8;
+		font-size: 18px;
+	}
+
+	/* 圖片外框 */
+	.photo-frame {
+		margin-top: 20px;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 18px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+	}
+
+	/* 相片列 */
+	.photos img {
+		width: 100%;
+		display: none;
+	}
+	/* 第一張預設顯示 */
+	#p1 {
+		display: block;
+	}
+	/* ==== #photoBox 圓形照片輪播 ==== */
+	#photoBox .photos {
+		width: 300px;
+		height: 300px;
+		margin: auto;
+		border-radius: 50%;          /* 圓形遮罩 */
+		overflow: hidden;
+		position: relative;
+		background-color: #a5d8ff;   /* 圓形底色，可改 */
+	}
+
+	/* 所有圖片預設隱藏 */
+	#photoBox .photos img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: none;
+	}
+
+	/* 被點擊的那張顯示 */
+	#photoBox .photos img:target {
+		display: block;
+	}
+
+	/* 預設顯示第一張 */
+	#photoBox .photos img:first-child {
+		display: block;
+	}
+
+	/* 數字按鈕 */
+	#photoBox ul {
+		position: absolute;
+		right: 20px;
+		bottom: 10px;
+		z-index: 10;
+	}
+
+	#photoBox ul li {
+		width: 30px;
+		height: 30px;
+		margin: 0 2px;
+		float: left;
+		list-style: none;
+		text-align: center;
+		line-height: 30px;
+		background-color: #8b5cf6; /* 紫色 */
+		border-radius: 50%;
+		transition: 0.3s;
+	}
+
+	#photoBox ul li a {
+		display: block;
+		width: 100%;
+		height: 100%;
+		color: white;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	#photoBox ul li:hover {
+		background-color: #f59e0b; /* 橘色 */
+	}
+	#p1 { /* 預設顯示第一張 */
+		display: block;
+	}
+
+	.music-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 20px;    /* 每個項目間距 */
+		margin-top: 20px;
+	}
+	
+
+	.music-item {
+		width: 45%;   /* 兩個一排 */
+		min-width: 250px;
+	}
+
+	.music-item audio {
+		width: 100%;
+	}
+
+	/* 整體排版 */
+	#video .info-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 20px;
+	}
+
+	/* 主影片 */
+	#video .main-video {
+		position: relative; /* 讓標題絕對定位 */
+		width: 100%;
+	}
+
+	#video .main-video video {
+		width: 100%;
+		height: 50vh;               /* 半螢幕高度 */
+		object-fit: cover;          /* 避免影片變形 */
+		border: 6px solid #234236;  /* 邊框 */
+		border-radius: 14px;
+		box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+	}
+
+	/* 標題融入邊框 */
+	#video .main-video .video-title {
+		position: absolute;
+		top: -6px;              /* 貼近邊框 */
+		left: 0;
+		width: 100%;
+		background: #234236;       /* 與邊框同色 */
+		color: #fff;
+		text-align: center;
+		padding: 6px 0;
+		border-top:-left-radius 14px;
+		border-top:-right-radius 14px;
+		font-weight: bold;
+		font-size: 1rem;
+	}
+
+	/* 側邊影片排列 */
+	#video .side-videos {
+		display: flex;
+		justify-content: space-between;
+		gap: 2%;
+		width: 100%;
+	}
+
+	#video .side-videos video {
+		width: 48%;
+		border-radius: 12px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+	}
+
+	/* 控制列放大 (Chrome / Edge) */
+	video::-webkit-media-controls-panel {
+		padding: 18px !important;
+	}
+
+	video::-webkit-media-controls-play-button,
+	video::-webkit-media-controls-volume-slider-container,
+	video::-webkit-media-controls-timeline {
+		transform: scale(1.4);
+		margin: 6px;
+	}
+
+	/* 控制列放大 (Firefox) */
+	video {
+		--media-controls-padding: 20px;
+		--media-controls-button-size: 32px;
+	}
+
+	/* ===== Footer：新版（照片在上 → 文字在下） ===== */
+	footer {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 130px;
+		background-color: #3b241a; /* 深棕色，與軍綠主色有區隔 */
+		color: #fdf5e6;
+		box-shadow: 0 -4px 12px rgba(0,0,0,0.7);
+		z-index: 900;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.footer-inner {
+		width: 100%;
+		height: 100%;
+		max-width: 1200px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start; /* 讓跑馬燈在最上面 */
+		align-items: center;
+		padding: 8px 16px 4px;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	/* === 跑馬燈區塊（最上面） === */
+	.footer-marquee {
+		width: 100%;
+		overflow: hidden;
+		margin-bottom: 6px; /* 與文字區間隔 */
+	}
+
+	.footer-marquee marquee {
+    width: 100%;
+    white-space: nowrap;
+    line-height: normal;			
+	}
+
+	/* 照片造型與互動效果 */
+	.footer-marquee img {
+		width: 90px;
+		height: 80px;
+		object-fit: cover;
+		margin: 0 6px;
+		transition: 0.35s ease;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.55);
+	}
+
+	/* 1：圓角矩形 */
+	.footer-marquee img:nth-of-type(1) {
+		border-radius: 14px;
+	}
+	.footer-marquee img:nth-of-type(1):hover {
+		transform: translateY(-4px) scale(1.05);
+	}
+
+	/* 2：圓形 */
+	.footer-marquee img:nth-of-type(2) {
+		border-radius: 50%;
+	}
+	.footer-marquee img:nth-of-type(2):hover {
+		transform: translateY(-4px) scale(1.08);
+	}
+
+	/* 3：膠囊形 */
+	.footer-marquee img:nth-of-type(3) {
+		border-radius: 999px 18px 999px 18px;
+	}
+	.footer-marquee img:nth-of-type(3):hover {
+		transform: translateY(-6px) scale(1.07);
+	}
+
+	/* 4：斜切角 */
+	.footer-marquee img:nth-of-type(4) {
+		border-radius: 18px 6px 18px 6px;
+	}
+	.footer-marquee img:nth-of-type(4):hover {
+		transform: translateY(-5px) scale(1.06);
+	}
+	.footer-marquee img:nth-of-type(5) {
+		border-radius: 14px;
+	}
+	.footer-marquee img:nth-of-type(5):hover {
+		transform: translateY(-4px) scale(1.05);
+	}
+	.footer-marquee img:nth-of-type(6) {
+		border-radius: 50%;
+	}
+	.footer-marquee img:nth-of-type(6):hover {
+		transform: translateY(-4px) scale(1.08);
+	}
+
+	/* 精選甜點連結 */
+	.footer-marquee a {
+		color: #ffe7c2;
+		font-size: 0.9em;
+		margin-left: 6px;
+		text-decoration: none;
+	}
+	.footer-marquee a:hover {
+		text-decoration: underline;
+	}
+
+	/* === 文字介紹區（在跑馬燈下面） === */
+	.footer-title {
+		font-family: "Cinzel Decorative", "Noto Serif TC", serif;
+		font-size: 1.05em;
+		letter-spacing: 2px;
+		margin: 0;
+	}
+
+	.footer-subtitle {
+		font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+		font-size: 0.82em;
+		margin: 2px 0 0;
+		color: #ffe4c4;
+	}
+    /* ===== 響應式 RWD 設定 ===== */
+
+/* 當螢幕寬度小於 992px 時 (平板與手機) */
+@media screen and (max-width: 992px) {
+    /* 1. 調整 Header 與 Nav 的高度固定，避免蓋住內容 */
+    header { height: 60px; }
+    nav.main-nav { top: 60px; }
+    
+    /* 2. 主內容 Article 改為全寬 */
+    article {
+        position: relative; /* 取消絕對定位 */
+        top: 110px;        /* 預留 header+nav 空間 */
+        left: 0;
+        width: 100%;
+        height: auto;      /* 高度隨內容增長 */
+        border-radius: 0;
+        box-shadow: none;
+        padding: 15px;
+        overflow: visible;
+    }
+
+    /* 3. 右側欄 Aside 改為全寬，並排在 Article 之後 */
+    aside {
+        position: relative; /* 取消絕對定位 */
+        top: 110px;        /* 同樣預留上方空間 */
+        left: 0;
+        width: 100%;
+        height: 300px;     /* 在手機版固定輪播高度 */
+        border-left: none;
+        border-top: 1px solid #38433f;
+    }
+
+    /* 4. Footer 取消固定在底部，讓頁面可以捲動到底 */
+    footer {
+        position: relative; 
+        margin-top: 110px; /* 補足移動補償 */
+        height: auto;
+        padding-bottom: 20px;
+    }
+
+    /* 5. 導覽列選單調整 */
+    ul.drop-down-menu a {
+        min-width: 110px;
+        padding: 5px 10px;
+        font-size: 13px;
+    }
+    
+    /* 6. 影片與圖片區塊調整 */
+    #video .side-videos {
+        flex-direction: column; /* 影片改為垂直排列 */
+        gap: 10px;
+    }
+    #video .side-videos video {
+        width: 100%;
+    }
+    
+    .music-item {
+        width: 100%; /* 音樂改為一排一個 */
+    }
+
+    .character-box {
+        flex-direction: column; /* 角色介紹圖文改垂直 */
+        text-align: center;
+    }
+    .character-img {
+        max-width: 100%;
+    }
 }
 
-/* ===== Header & Nav ===== */
-header {
-    position: fixed;
-    top: 0; width: 100%; height: 70px;
-    background: #234236;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.45);
-    z-index: 1000; color: #fdf9f0;
-}
-header h1 { font-size: 1.8em; letter-spacing: 3px; display: flex; align-items: center; gap: 8px; margin: 0; }
-
-nav.main-nav {
-    position: fixed;
-    top: 70px; width: 100%;
-    background: #182823;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.6);
-    z-index: 950; padding: 6px 0 10px;
-}
-ul.drop-down-menu {
-    margin: 0; padding: 0; list-style: none;
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
-}
-ul.drop-down-menu > li { position: relative; }
-ul.drop-down-menu a {
-    background: #275344; border: 1.5px solid #e5cda1;
-    border-radius: 999px; padding: 7px 20px;
-    min-width: 140px; display: block; text-align: center;
-    text-decoration: none; font-size: 14px; color: #fef9ec;
-    transition: 0.25s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.45);
-}
-ul.drop-down-menu a:hover {
-    background: #35715a; border-color: #f5ddaa;
-    color: #fffdf3; transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.7);
-}
-
-/* 下拉選單層級 */
-ul.drop-down-menu ul { position: absolute; top: 100%; left: 0; display: none; padding: 8px 0; margin: 0; list-style: none; }
-ul.drop-down-menu li:hover > ul { display: block; }
-ul.drop-down-menu ul a { min-width: 170px; background: #1a2d26; border-radius: 10px; border: 1px solid #d9c18e; font-size: 13px; }
-ul.drop-down-menu ul li { position: relative; }
-ul.drop-down-menu ul ul { position: absolute; top: 0; left: 100%; display: none; }
-ul.drop-down-menu ul li:hover > ul { display: block; }
-ul.drop-down-menu ul ul a { background: #14241f; border: 1px solid #c8b78d; }
-
-.arrow-down { border-top: 6px solid #fdf6e4; border-left: 4px solid transparent; border-right: 4px solid transparent; display: inline-block; margin-left: 6px; }
-.arrow-right { border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid #fdf6e4; display: inline-block; margin-left: 6px; }
-
-/* ===== RWD 佈局核心 (改用 Flexbox 替代 Absolute) ===== */
-.main-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 125px; /* header + nav 的高度 */
-    margin-bottom: 130px; /* footer 的高度 */
-}
-
-article {
-    flex: 1 1 70%;
-    padding: 24px 26px;
-    background: #f7efe2;
-    color: #111827;
-    border-radius: 0 18px 0 0;
-    box-shadow: 4px 0 16px rgba(0,0,0,0.25);
-    overflow: hidden; /* 讓內容由 body 滾動 */
-}
-
-aside {
-    flex: 1 1 30%;
-    padding: 18px;
-    background: #141917;
-    border-left: 1px solid #38433f;
-    color: #e5e7eb;
-}
-
-/* ===== 原始元件樣式保留 ===== */
-article section { margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid #e3d5c5; }
-article h2 { margin: 0 0 10px 0; font-size: 1.4em; color: #111827; border-left: 4px solid #8b3b2c; padding-left: 8px; }
-article h3 { margin: 0 0 8px 0; font-size: 1.1em; color: #374151; }
-
-.info-card { padding: 10px 12px; border-radius: 12px; background: #fff9ef; box-shadow: 0 2px 5px rgba(0,0,0,0.06); }
-.info-card p { margin: 4px 0; line-height: 1.7; font-size: 0.95em; color: #374151; }
-
-.character-box { display: flex; gap: 16px; align-items: center; background: #fff9ef; padding: 16px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 10px; }
-.character-text { flex: 2; }
-.character-img { flex: 1; max-width: 180px; }
-.character-img img { width: 100%; border-radius: 12px; object-fit: cover; }
-
-/* 側邊欄輪播 */
-aside.slide-wrap { position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 14px; }
-aside .slide-wrap a { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; animation: fadeSlide 20s linear infinite; }
-aside .slide-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s ease; border-radius: 16px; }
-@keyframes fadeSlide { 3% {opacity: 1;} 18% {opacity: 1;} 20% {opacity: 0;} }
-aside .slide-wrap a:nth-child(1) { animation-delay: 0s; }
-aside .slide-wrap a:nth-child(2) { animation-delay: 4s; }
-aside .slide-wrap a:nth-child(3) { animation-delay: 8s; }
-aside .slide-wrap a:nth-child(4) { animation-delay: 12s; }
-aside .slide-wrap a:nth-child(5) { animation-delay: 16s; }
-
-/* 圖片效果 */
-img:hover { transform: scale(1.07) rotate(1.5deg); border-radius: 26px !important; box-shadow: 0 6px 18px rgba(0,0,0,0.6); transition: 0.35s ease; }
-
-/* 圓形照片輪播 */
-#photoBox .photos { width: 300px; height: 300px; margin: auto; border-radius: 50%; overflow: hidden; position: relative; background-color: #a5d8ff; }
-#photoBox .photos img { width: 100%; height: 100%; object-fit: cover; display: none; }
-#photoBox .photos img:first-child, #photoBox .photos img:target { display: block; }
-#photoBox ul { position: absolute; right: 20px; bottom: 10px; z-index: 10; padding: 0; }
-#photoBox ul li { width: 30px; height: 30px; margin: 0 2px; list-style: none; text-align: center; line-height: 30px; background-color: #8b5cf6; border-radius: 50%; float: left; }
-#photoBox ul li a { display: block; width: 100%; height: 100%; color: white; text-decoration: none; }
-
-/* 音樂與影片 */
-.music-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-.music-item { width: 45%; min-width: 250px; }
-#video .main-video { position: relative; width: 100%; }
-#video .main-video video { width: 100%; height: 50vh; object-fit: cover; border: 6px solid #234236; border-radius: 14px; }
-#video .side-videos { display: flex; justify-content: space-between; gap: 2%; width: 100%; margin-top: 10px; }
-#video .side-videos video { width: 48%; border-radius: 12px; }
-
-/* Footer */
-footer { position: fixed; bottom: 0; width: 100%; height: 130px; background-color: #3b241a; color: #fdf5e6; z-index: 900; display: flex; justify-content: center; align-items: center; }
-.footer-inner { width: 100%; text-align: center; }
-.footer-marquee img { width: 90px; height: 80px; object-fit: cover; margin: 0 6px; }
-
-/* ===== 手機版 RWD 修正 (重點) ===== */
-@media (max-width: 768px) {
-    .main-wrapper { margin-top: 140px; } /* 手機導覽列可能換行，增加間距 */
-    article, aside { flex: 1 1 100%; border-radius: 0; }
-    aside.slide-wrap { height: 300px; } /* 手機縮短輪播高度 */
-    .character-box { flex-direction: column; text-align: center; }
-    .character-img { max-width: 100%; }
-    .music-item { width: 100%; }
-    #video .side-videos { flex-direction: column; gap: 10px; }
-    #video .side-videos video { width: 100%; }
-    ul.drop-down-menu a { min-width: 100px; padding: 7px 10px; font-size: 12px; }
-    #photoBox .photos { width: 200px; height: 200px; }
+/* 當螢幕寬度小於 600px 時 (小型手機) */
+@media screen and (max-width: 600px) {
+    header h1 { font-size: 1.2em; letter-spacing: 1px; }
+    
+    ul.drop-down-menu {
+        justify-content: flex-start;
+        padding-left: 10px;
+        overflow-x: auto; /* 選單太長時可左右滑動 */
+        white-space: nowrap;
+        flex-wrap: nowrap;
+    }
+    
+    #photoBox .photos {
+        width: 200px; /* 縮小圓形輪播 */
+        height: 200px;
+    }
 }
